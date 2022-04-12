@@ -10,10 +10,14 @@ class MopidyLibraryProvider(backend.LibraryProvider):
         self._url = url
         uri = "mopidymopidy:directory:root"
         name = "Mopidy Master"
-        artwork = "yastatic.net/doccenter/images/support.yandex.com/en/music/freeze/fzG5B6KxX0dggCpZn4SQBpnF4GA.png"
+        artwork = "user-images.githubusercontent.com/38141262/39072403-9afaaf90-4514-11e8-9518-14e978e54e3f.png"
         self.root_directory = ARef(type=ARef.PLAYLIST, uri=uri, name=name, artwork=artwork)
 
+
+
     def browse(self, uri):
+        logger.error('browse')
+        logger.error(uri)
         uri = Utils.uri_to_master(uri)
         if uri == "root":
           uri = None
@@ -24,17 +28,44 @@ class MopidyLibraryProvider(backend.LibraryProvider):
           "id": 0,
         }
         response = requests.post(self._url, json=payload).json()
+        logger.error(response)
+
         refs = []
         for res in response['result']:
           refs.append(ARef.from_ref(res))
         return refs
 
     def search(self, query, uris = None, exact = False):
-        logger.error('search')
+        logger.error('library search')
         logger.error(query)
+        payload = {
+          "method": "core.library.search",
+          "jsonrpc": "2.0",
+          "params": {"query":query,"uris":uris},
+          "id": 0,
+        }
+        response = requests.post(self._url, json=payload).json()
+        res_tracks = []
+        res_albums = []
+        res_artists = []
+        for res in response['result']:
+          if 'tracks' in res:
+            for track in res['tracks']:
+              res_tracks.append(ATrack.from_track(track))
+          if 'albums' in res:
+            for album in res['albums']:
+              res_albums.append(AAlbum.from_album(album))
+          if 'artists' in res:
+            for artist in res['artists']:
+              res_artists.append(AArtist.from_artist(artist))
+        sresult = models.SearchResult(uri='', tracks=res_tracks, artists=res_artists, albums=res_albums)
+        logger.error(sresult)
         return sresult
 
+
     def lookup(self, uri: str):
+        logger.error('library lookup')
+        logger.error(uri)
         uri = Utils.uri_to_master(uri)
         logger.error(uri)
         payload = {
@@ -47,13 +78,33 @@ class MopidyLibraryProvider(backend.LibraryProvider):
         tracks = []
         for res in response['result']:
           for track in response['result'][res]:
-            track['uri'] = res
+            logger.error(track)
+            if 'uri' not in track:
+              track['uri'] = res
             tracks.append( ATrack.from_track(track))
+
         return tracks
 
     def get_images(self, uris):
         logger.error('get_images')
         logger.error(uris)
-        result = dict()
+        master_uris = []
+        for uri in uris:
+          master_uris.append(Utils.uri_to_master(uri))
 
+        payload = {
+          "method": "core.library.get_images",
+          "jsonrpc": "2.0",
+          "params": {"uris":master_uris},
+          "id": 0,
+        }
+        result = dict()
+        response = requests.post(self._url, json=payload).json()
+        for res_uri in response['result']:
+          for image in response['result'][res_uri]:
+            for uri in uris:
+              if res_uri in uri:
+                result[uri] = [models.Image(uri=image['uri'])]
+                break
+        logger.error(result)
         return result

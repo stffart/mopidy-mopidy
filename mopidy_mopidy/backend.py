@@ -12,12 +12,12 @@ class MopidyMusicBackend(pykka.ThreadingActor, backend.Backend):
 
         host = ym_config["host"]
         url = "http://{}:6680/mopidy/rpc".format(host)
-
+        master_url = "http://{}:6680/master/".format(host)
         self._config = config
         self._audio = audio
 
         self.playlists = MopidyPlaylistProvider(self, url)
-        self.playback = MopidyPlaybackProvider(self, audio, url)
+        self.playback = MopidyPlaybackProvider(self, audio, master_url)
         self.library = MopidyLibraryProvider(url)
 
         self.uri_schemes = ["mopidymopidy"]

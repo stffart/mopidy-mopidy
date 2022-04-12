@@ -14,11 +14,12 @@ class MopidyPlaybackProvider(backend.PlaybackProvider):
         logger.error('translate')
         logger.error(uri)
         uri = Utils.uri_to_master(uri)
-        payload = {
-          "method": "core.playback.translate_uri",
-          "jsonrpc": "2.0",
-          "params": {"uri":uri},
-          "id": 0,
-        }
-        response = requests.post(self._url, json=payload).json()
-        return response['result']
+        return self._url+uri;
+#        payload = {
+#          "method": "core.playback.translate_uri",
+#          "jsonrpc": "2.0",
+#          "params": {"uri":uri},
+#          "id": 0,
+#        }
+#        response = requests.post(self._url, json=payload).json()
+#        return response['result']

@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='mopidy-mopidy',
-    version='0.1',
+    version='0.5',
     description='Mopidy satellite extension',
     description_file='README.md',
     url='https://github.com/stffart/mopidy-mopidy',

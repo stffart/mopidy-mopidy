@@ -29,8 +29,9 @@ class AAlbum(Album):
      else:
        artwork = ''
      artists = []
-     for artist in album['artists']:
-        artists.append(AArtist.from_artist(artist))
+     if 'artists' in album:
+       for artist in album['artists']:
+          artists.append(AArtist.from_artist(artist))
 
      return AAlbum(uri="mopidymopidy:album:"+uri, name=album['name'], artists=artists,artwork=artwork)
 
@@ -60,13 +61,24 @@ class ATrack(Track):
       logger.error(track['artists'])
       for artist in track['artists']:
         artists.append(AArtist.from_artist(artist))
-      album = AAlbum.from_album(track['album'])
+      if 'album' in track:
+        album = AAlbum.from_album(track['album'])
+      else:
+        album = None
       if 'like' in track:
         like = track['like']
       else:
         like = False
+      if 'length' in track:
+        length = track['length']
+      else:
+        length = 0
+      if 'artwork' in track:
+        artwork = track['artwork']
+      else:
+        artwork = ''
       return ATrack(uri="mopidymopidy:track:"+track['uri'],name=track['name'],
-            length=track['length'], artwork=track['artwork'], artists=artists, album=album, like=like)
+            length=length, artwork=artwork, artists=artists, album=album, like=like)
 
 class APlaylist(Playlist):
   artwork = fields.String()
