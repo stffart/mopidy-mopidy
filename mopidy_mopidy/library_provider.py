@@ -16,8 +16,6 @@ class MopidyLibraryProvider(backend.LibraryProvider):
 
 
     def browse(self, uri):
-        logger.error('browse')
-        logger.error(uri)
         uri = Utils.uri_to_master(uri)
         if uri == "root":
           uri = None
@@ -28,16 +26,12 @@ class MopidyLibraryProvider(backend.LibraryProvider):
           "id": 0,
         }
         response = requests.post(self._url, json=payload).json()
-        logger.error(response)
-
         refs = []
         for res in response['result']:
           refs.append(ARef.from_ref(res))
         return refs
 
     def search(self, query, uris = None, exact = False):
-        logger.error('library search')
-        logger.error(query)
         payload = {
           "method": "core.library.search",
           "jsonrpc": "2.0",
@@ -59,15 +53,11 @@ class MopidyLibraryProvider(backend.LibraryProvider):
             for artist in res['artists']:
               res_artists.append(AArtist.from_artist(artist))
         sresult = models.SearchResult(uri='', tracks=res_tracks, artists=res_artists, albums=res_albums)
-        logger.error(sresult)
         return sresult
 
 
     def lookup(self, uri: str):
-        logger.error('library lookup')
-        logger.error(uri)
         uri = Utils.uri_to_master(uri)
-        logger.error(uri)
         payload = {
           "method": "core.library.lookup",
           "jsonrpc": "2.0",
@@ -78,7 +68,6 @@ class MopidyLibraryProvider(backend.LibraryProvider):
         tracks = []
         for res in response['result']:
           for track in response['result'][res]:
-            logger.error(track)
             if 'uri' not in track:
               track['uri'] = res
             tracks.append( ATrack.from_track(track))
@@ -86,8 +75,6 @@ class MopidyLibraryProvider(backend.LibraryProvider):
         return tracks
 
     def get_images(self, uris):
-        logger.error('get_images')
-        logger.error(uris)
         master_uris = []
         for uri in uris:
           master_uris.append(Utils.uri_to_master(uri))
@@ -106,5 +93,4 @@ class MopidyLibraryProvider(backend.LibraryProvider):
               if res_uri in uri:
                 result[uri] = [models.Image(uri=image['uri'])]
                 break
-        logger.error(result)
         return result

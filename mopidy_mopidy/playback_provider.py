@@ -15,6 +15,7 @@ class MopidyPlaybackProvider(backend.PlaybackProvider):
         logger.error(uri)
         uri = Utils.uri_to_master(uri)
         return self._url+uri;
+#There is no such method in official mopidy.core, we have to use mopidy-master module
 #        payload = {
 #          "method": "core.playback.translate_uri",
 #          "jsonrpc": "2.0",

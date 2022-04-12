@@ -18,7 +18,6 @@ class MopidyPlaylistProvider(backend.PlaylistsProvider):
         logger.debug("mopidy backend started")
 
     def as_list(self) -> List[ARef]:
-        logger.error("playlist as list")
 
         payload = {
           "method": "core.playlists.as_list",
@@ -33,13 +32,10 @@ class MopidyPlaylistProvider(backend.PlaylistsProvider):
           else:
             artwork = ''
           playlists.append(ARef(type=ARef.PLAYLIST,uri="mopidymopidy:playlist:"+res['uri'],name=res['name'],artwork=artwork))
-        logger.error(playlists)
         return playlists
 
 
     def lookup(self, uri: str) -> APlaylist:
-        logger.error("playlist lookup")
-        logger.error(uri)
         uri = Utils.uri_to_master(uri)
         payload = {
           "method": "core.playlists.lookup",
