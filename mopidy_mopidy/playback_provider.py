@@ -11,10 +11,10 @@ class MopidyPlaybackProvider(backend.PlaybackProvider):
         self._url = url
 
     def translate_uri(self, uri: str):
-        logger.error('translate')
-        logger.error(uri)
+        logger.debug('translate '+uri)
         uri = Utils.uri_to_master(uri)
-        return self._url+uri;
+        logger.debug( self._url+"track/"+uri )
+        return self._url+"track/"+uri;
 #There is no such method in official mopidy.core, we have to use mopidy-master module
 #        payload = {
 #          "method": "core.playback.translate_uri",
