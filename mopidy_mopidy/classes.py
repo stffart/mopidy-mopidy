@@ -57,8 +57,6 @@ class ATrack(Track):
   @staticmethod
   def from_track(track):
       artists = []
-      logger.error(track)
-      logger.error(track['artists'])
       for artist in track['artists']:
         artists.append(AArtist.from_artist(artist))
       if 'album' in track:

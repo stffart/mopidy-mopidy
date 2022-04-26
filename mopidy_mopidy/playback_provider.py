@@ -13,14 +13,4 @@ class MopidyPlaybackProvider(backend.PlaybackProvider):
     def translate_uri(self, uri: str):
         logger.debug('translate '+uri)
         uri = Utils.uri_to_master(uri)
-        logger.debug( self._url+"track/"+uri )
         return self._url+"track/"+uri;
-#There is no such method in official mopidy.core, we have to use mopidy-master module
-#        payload = {
-#          "method": "core.playback.translate_uri",
-#          "jsonrpc": "2.0",
-#          "params": {"uri":uri},
-#          "id": 0,
-#        }
-#        response = requests.post(self._url, json=payload).json()
-#        return response['result']
