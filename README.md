@@ -24,7 +24,8 @@ pip install mopidy-mopidy
 ```
 [mopidy_mopidy]
 enabled = true
-host = your_master_host
-
+master = your_master_host
+name = satellite name
+ip = satellite ip
 ```
 
