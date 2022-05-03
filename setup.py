@@ -15,7 +15,7 @@ setup(
     install_requires=[],
     entry_points={
         'mopidy.ext': [
-            'mopidy = mopidy_mopidy:Extension',
+            'mopidy_mopidy = mopidy_mopidy:Extension',
         ],
     },
     classifiers=[

@@ -4,7 +4,6 @@ import pykka
 import os
 from mopidy import exceptions, listener, zeroconf
 from mopidy.core import CoreListener
-from mopidy_mpd import network, session, uri_mapper
 import requests
 import logging
 import asyncio
