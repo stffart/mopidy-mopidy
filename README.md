@@ -12,8 +12,10 @@ Features:
 
 
 ### Installation
+Install [Mopidy-Master](https://github.com/stffart/mopidy-master) on master server first.
 
-Install by running:
+
+Then install mopidy-mopidy on other servers by running:
 
 ```
 pip install mopidy-mopidy
@@ -22,10 +24,18 @@ pip install mopidy-mopidy
 ### Configuration
 
 ```
+[http]
+enabled = true
+hostname = satellite ip (must be available from master for synchronization)
+port = 6680
+#disable csrf protection for connecting to mopidy websocket from any client in network
+csrf_protection = false
+
+
 [mopidy_mopidy]
 enabled = true
 master = your_master_host
 name = satellite name
-ip = satellite ip
+ip = satellite ip (must be available from master for synchronization)
 ```
 
