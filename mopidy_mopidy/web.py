@@ -97,9 +97,12 @@ class MasterApiWebSocketHandler(websocket.WebSocketHandler):
            logger.error(self.future)
 
         logger.error(message)
-        if message == 'list':
-          self.ws.write_message("list")
-        if 'activate:' in message:
+        try:
+          data = json.loads(message)
+        except:
+          logger.error('bad command received')
+          return
+        if data['message'] in ['list','devices','activate','subscribe']:
           self.ws.write_message(message)
 
     def on_close(self):
