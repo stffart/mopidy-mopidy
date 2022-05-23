@@ -102,7 +102,9 @@ class MasterApiWebSocketHandler(websocket.WebSocketHandler):
         except:
           logger.error('bad command received')
           return
-        if data['message'] in ['list','devices','activate','subscribe']:
+        if data['message'] == 'list':
+          self.ws.write_message(message)
+        if 'activate:' in data['message']:
           self.ws.write_message(message)
 
     def on_close(self):
