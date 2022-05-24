@@ -104,7 +104,7 @@ class MasterApiWebSocketHandler(websocket.WebSocketHandler):
           return
         if data['message'] == 'list':
           self.ws.write_message(message)
-        if 'activate:' in data['message']:
+        if 'activate' in data['message']:
           self.ws.write_message(message)
 
     def on_close(self):
